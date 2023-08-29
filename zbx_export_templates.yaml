@@ -1,0 +1,1294 @@
+zabbix_export:
+  version: '6.0'
+  date: '2023-08-29T13:49:17Z'
+  groups:
+    -
+      uuid: 292807c8094c457faa9211b481f99971
+      name: 'PATRICK TEMPLATES'
+  templates:
+    -
+      uuid: cafbbaed016c4b398d8ca07212fa47d4
+      template: Huawei_Pk
+      name: 'HUAWEI S6720-S6730'
+      groups:
+        -
+          name: 'PATRICK TEMPLATES'
+      items:
+        -
+          uuid: 365e9506ae9540edabc86d0de5e86a1d
+          name: Disponibilidade
+          type: SIMPLE
+          key: icmpping
+          triggers:
+            -
+              uuid: bf0e3f306e4747928d5ca73ce95c9c9b
+              expression: 'last(/Huawei_Pk/icmpping)= 0'
+              name: 'Equipamento Down'
+              priority: DISASTER
+        -
+          uuid: d76f3ce594b24f6faa2bfd4437f34558
+          name: 'Ping Loss'
+          type: SIMPLE
+          key: icmppingloss
+          value_type: FLOAT
+        -
+          uuid: b1305da54bde430b9be93f790f77ed48
+          name: Latência
+          type: SIMPLE
+          key: icmppingsec
+          value_type: FLOAT
+      discovery_rules:
+        -
+          uuid: fe4fab7ace124f81aa55cacff8c69592
+          name: 'Hardware Status'
+          type: SNMP_AGENT
+          snmp_oid: 'discovery[{#SNMPVALUE},.1.3.6.1.4.1.2011.5.25.31.1.1.1.1.10]'
+          key: HwStts
+          filter:
+            conditions:
+              -
+                macro: '{#SNMPVALUE}'
+                value: '0'
+                operator: NOT_MATCHES_REGEX
+                formulaid: A
+          item_prototypes:
+            -
+              uuid: fa2ec47618fa47c39cad29cb4ee32513
+              name: 'Device CPU Usage'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.1.1.5.{#SNMPINDEX}'
+              key: 'DeviceCPUUsage.[{#SNMPINDEX}]'
+              value_type: FLOAT
+              trigger_prototypes:
+                -
+                  uuid: c66d3f8d41a745f9a78b63da7c1673f2
+                  expression: 'last(/Huawei_Pk/DeviceCPUUsage.[{#SNMPINDEX}]) > 75'
+                  name: 'Device CPU Usage >= 75%'
+                  priority: HIGH
+                  manual_close: 'YES'
+            -
+              uuid: cb705784a8594416a6553d0c0e5d31d2
+              name: 'Device CPU Usage Threshold'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.1.1.6.{#SNMPINDEX}'
+              key: 'DeviceCPUUsageThreshold.[{#SNMPINDEX}]'
+              value_type: FLOAT
+            -
+              uuid: c8bf722c3d3740f5bfa0c2d8564a8e1a
+              name: 'Device Memory Usage'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.1.1.7.{#SNMPINDEX}'
+              key: 'DeviceMenUsage.[{#SNMPINDEX}]'
+              value_type: FLOAT
+              trigger_prototypes:
+                -
+                  uuid: 517a6c1b6748492b9c98af6f5bd59118
+                  expression: 'last(/Huawei_Pk/DeviceMenUsage.[{#SNMPINDEX}]) > 75'
+                  name: 'Device Memory Usage >= 75%'
+                  priority: HIGH
+                  manual_close: 'YES'
+            -
+              uuid: 7014511ffc534faca2718c18360a5b27
+              name: 'Device Memory Usage Threshold'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.1.1.8.{#SNMPINDEX}'
+              key: 'DeviceMenUsageThreshold.[{#SNMPINDEX}]'
+              value_type: FLOAT
+            -
+              uuid: bba620163da44f948a85c8ce8036bfdd
+              name: 'Device Temperature'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.1.1.11.{#SNMPINDEX}'
+              key: 'DeviceTemperature.[{#SNMPINDEX}]'
+              value_type: FLOAT
+            -
+              uuid: d6ada89bcfa9482dae1fb22c336308a4
+              name: 'Device Temperature High Threshold'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.1.1.12.{#SNMPINDEX}'
+              key: 'DeviceTemperatureHighThreshold.[{#SNMPINDEX}]'
+              value_type: FLOAT
+            -
+              uuid: bf6cfbe365e64ffeb1cbe9466c01fdca
+              name: 'Device Temperature Low Threshold'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.1.1.16.{#SNMPINDEX}'
+              key: 'DeviceTemperatureLowThreshold.[{#SNMPINDEX}]'
+              value_type: FLOAT
+            -
+              uuid: 625fd6d362cf4ab6a7a834051f215610
+              name: 'Device UpTime'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.1.1.10.{#SNMPINDEX}'
+              key: 'DeviceUpTime.[{#SNMPINDEX}]'
+              units: s
+            -
+              uuid: 281d4ea147bf4c1bac7eac513a659e79
+              name: 'Hardware Model'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.2.1.11.{#SNMPINDEX}'
+              key: 'HardwareModel.[{#SNMPINDEX}]'
+              trends: '0'
+              value_type: TEXT
+          trigger_prototypes:
+            -
+              uuid: 07312ce2b6b54b8196a457cbe178c88a
+              expression: 'last(/Huawei_Pk/DeviceTemperature.[{#SNMPINDEX}]) > last(/Huawei_Pk/DeviceTemperatureHighThreshold.[{#SNMPINDEX}]) or last(/Huawei_Pk/DeviceTemperature.[{#SNMPINDEX}]) < last(/Huawei_Pk/DeviceTemperatureLowThreshold.[{#SNMPINDEX}])'
+              name: 'Device Temperature out of threshold'
+              priority: HIGH
+              manual_close: 'YES'
+        -
+          uuid: 0147c756bcc14fcc89db4abc13f06f71
+          name: 'Interface Statistics'
+          type: SNMP_AGENT
+          snmp_oid: 'discovery[{#SNMPVALUE},.1.3.6.1.2.1.31.1.1.1.1]'
+          key: IntStatistics
+          filter:
+            evaltype: OR
+            conditions:
+              -
+                macro: '{#SNMPVALUE}'
+                value: XGigabitEthernet
+                formulaid: A
+              -
+                macro: '{#SNMPVALUE}'
+                value: 40GE
+                formulaid: B
+              -
+                macro: '{#SNMPVALUE}'
+                value: 100GE
+                formulaid: C
+          item_prototypes:
+            -
+              uuid: d74310f886cc4cb483a13993899e7b90
+              name: 'Interface {#SNMPVALUE} Admin Status'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.2.1.2.2.1.7.{#SNMPINDEX}'
+              key: 'intAdminStts.[{#SNMPINDEX}]'
+              delay: 3m
+              trends: '0'
+              value_type: TEXT
+              preprocessing:
+                -
+                  type: STR_REPLACE
+                  parameters:
+                    - '1'
+                    - 'Administratively Up'
+                -
+                  type: STR_REPLACE
+                  parameters:
+                    - '2'
+                    - 'administratively Down'
+            -
+              uuid: e32630c8203d460da4a369ea028d2321
+              name: 'Interface {#SNMPVALUE} CRC error'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.41.1.6.1.1.12.{#SNMPINDEX}'
+              key: 'intCrcError.[{#SNMPINDEX}]'
+              preprocessing:
+                -
+                  type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
+              trigger_prototypes:
+                -
+                  uuid: 2954141676904645b742a2c48d01bef7
+                  expression: 'last(/Huawei_Pk/intCrcError.[{#SNMPINDEX}])>= 100'
+                  name: 'Interface {#SNMPVALUE} Taxando Erro CRC ({ITEM.LASTVALUE})'
+                  priority: WARNING
+                  manual_close: 'YES'
+            -
+              uuid: 9ad2b8ffc1824f3d8c809bffe1660a8f
+              name: 'Interface {#SNMPVALUE} Description'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.2.1.31.1.1.1.18.{#SNMPINDEX}'
+              key: 'intDesc.[{#SNMPINDEX}]'
+              trends: '0'
+              value_type: TEXT
+            -
+              uuid: fe94e239351e42ecbcace6180874b95b
+              name: 'interface {#SNMPVALUE} Velocidade'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.2.1.31.1.1.1.15.{#SNMPINDEX}'
+              key: 'interfaceHighSpeed.[{#SNMPINDEX}]'
+              units: bps
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '1000000'
+            -
+              uuid: 0c47bee660d942919510e100ad08cec9
+              name: 'interface {#SNMPVALUE} Velocidade 85 %'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.2.1.31.1.1.1.15.{#SNMPINDEX}'
+              key: 'interfaceHighSpeedpercent.[{#SNMPINDEX}]'
+              units: bps
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '0.85'
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '1000000'
+            -
+              uuid: cd7f8a8eefae42e9bbb44587a8e24fe0
+              name: 'interface {#SNMPVALUE} Download'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.2.1.31.1.1.1.6.{#SNMPINDEX}'
+              key: 'interfaceIncomingTraffic.[{#SNMPINDEX}]'
+              units: bps
+              preprocessing:
+                -
+                  type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '8'
+            -
+              uuid: 706723e539e046159156f7b8e6a282bd
+              name: 'interface {#SNMPVALUE} Upload'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.2.1.31.1.1.1.10.{#SNMPINDEX}'
+              key: 'interfaceOutgoingTraffic.[{#SNMPINDEX}]'
+              units: bps
+              preprocessing:
+                -
+                  type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '8'
+            -
+              uuid: b6b6371e7b414cc78393ea9fcc04bce6
+              name: 'interface {#SNMPVALUE} Status'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.2.1.2.2.1.8.{#SNMPINDEX}'
+              key: 'interfaceStts.[{#SNMPINDEX}]'
+            -
+              uuid: e60399a76ea74eacacf1c4b8fc47b5b7
+              name: 'Interface {#SNMPVALUE} Incoming Discart'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.2.1.2.2.1.13.{#SNMPINDEX}'
+              key: 'intIncomingDiscart.[{#SNMPINDEX}]'
+              units: pkts
+              preprocessing:
+                -
+                  type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
+              trigger_prototypes:
+                -
+                  uuid: 6181dfdeb747447ea50a78173b95cb44
+                  expression: 'last(/Huawei_Pk/intIncomingDiscart.[{#SNMPINDEX}])>= 100'
+                  name: 'Interface {#SNMPVALUE} Incoming Discart ({ITEM.LASTVALUE})'
+                  priority: INFO
+                  manual_close: 'YES'
+            -
+              uuid: 71c1ea0aafee428f821066826107c256
+              name: 'Interface {#SNMPVALUE} Outgoing Discart'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.2.1.2.2.1.19.{#SNMPINDEX}'
+              key: 'intOutgoingDiscart.[{#SNMPINDEX}]'
+              units: pkts
+              preprocessing:
+                -
+                  type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
+              trigger_prototypes:
+                -
+                  uuid: fa20a01734bf4dc1a895dafb38fc2af1
+                  expression: 'last(/Huawei_Pk/intOutgoingDiscart.[{#SNMPINDEX}])>= 100'
+                  name: 'Interface {#SNMPVALUE} Outgoing Discart ({ITEM.LASTVALUE})'
+                  priority: INFO
+                  manual_close: 'YES'
+          trigger_prototypes:
+            -
+              uuid: 7947f33eb1f44c86a0c992fdbb9ef431
+              expression: '(last(/Huawei_Pk/interfaceStts.[{#SNMPINDEX}],#1)=2 and last(/Huawei_Pk/interfaceStts.[{#SNMPINDEX}],#2)=1) and (last(/Huawei_Pk/intDesc.[{#SNMPINDEX}])<> "" and last(/Huawei_Pk/intAdminStts.[{#SNMPINDEX}])="administratively Up")'
+              recovery_mode: RECOVERY_EXPRESSION
+              recovery_expression: 'last(/Huawei_Pk/interfaceStts.[{#SNMPINDEX}])=1 or last(/Huawei_Pk/intDesc.[{#SNMPINDEX}])="" or last(/Huawei_Pk/intAdminStts.[{#SNMPINDEX}])="administratively Down"'
+              name: 'Interface {#SNMPVALUE} Down'
+              priority: HIGH
+              manual_close: 'YES'
+            -
+              uuid: 36927d71ec50401289110ad66a176cb4
+              expression: 'last(/Huawei_Pk/interfaceIncomingTraffic.[{#SNMPINDEX}]) >= last(/Huawei_Pk/interfaceHighSpeedpercent.[{#SNMPINDEX}])'
+              name: 'Interface {#SNMPVALUE} Download Acima de 85%'
+              priority: AVERAGE
+              manual_close: 'YES'
+            -
+              uuid: abbe5c30edcc4c7591b018af593122cd
+              expression: 'last(/Huawei_Pk/interfaceOutgoingTraffic.[{#SNMPINDEX}]) >= last(/Huawei_Pk/interfaceHighSpeedpercent.[{#SNMPINDEX}])'
+              name: 'Interface {#SNMPVALUE} Upload Acima de 85%'
+              priority: AVERAGE
+              manual_close: 'YES'
+        -
+          uuid: a0e0ccecdc3a4dee8ff3b328f345498a
+          name: 'Interface Vlan Statistics'
+          type: SNMP_AGENT
+          snmp_oid: 'discovery[{#SNMPVALUE},.1.3.6.1.2.1.31.1.1.1.1]'
+          key: IntVlanStatistics
+          filter:
+            evaltype: OR
+            conditions:
+              -
+                macro: '{#SNMPVALUE}'
+                value: Vlan
+                formulaid: A
+          item_prototypes:
+            -
+              uuid: 2269beae093b4505b93b0c697ebfee96
+              name: 'Interface {#SNMPVALUE} Admin Status'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.2.1.2.2.1.7.{#SNMPINDEX}'
+              key: 'intVlanAdminStts.[{#SNMPINDEX}]'
+              trends: '0'
+              value_type: TEXT
+            -
+              uuid: 9d7b6823512d44a5b5984ad96c447168
+              name: 'Interface {#SNMPVALUE} Description'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.2.1.31.1.1.1.18.{#SNMPINDEX}'
+              key: 'intVlanDesc.[{#SNMPINDEX}]'
+              trends: '0'
+              value_type: TEXT
+            -
+              uuid: 93c977767d804f01b5574f85056812f7
+              name: 'interface {#SNMPVALUE} Status'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.2.1.2.2.1.8.{#SNMPINDEX}'
+              key: 'intVlanStts.[{#SNMPINDEX}]'
+              value_type: FLOAT
+        -
+          uuid: 6f4a15b715d0414faa6a5df1137711ad
+          name: 'Transceiver 10G Information'
+          type: SNMP_AGENT
+          snmp_oid: 'discovery[{#SNMPVALUE},.1.3.6.1.2.1.47.1.1.1.1.7]'
+          key: sensorsTransceiver10G
+          filter:
+            conditions:
+              -
+                macro: '{#SNMPVALUE}'
+                value: XGigabitEthernet
+                formulaid: A
+          item_prototypes:
+            -
+              uuid: 6c9ef68843c04ea5abfd9b100e7fa1aa
+              name: 'Interface {#SNMPVALUE} Admin Status'
+              type: EXTERNAL
+              key: 'adminstts.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},1]'
+              value_type: FLOAT
+            -
+              uuid: 101ebe1930ba4feb9fd3dc9f80a76fea
+              name: 'interface {#SNMPVALUE} RX High Threshold'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.3.1.14.{#SNMPINDEX}'
+              key: 'interfaceRXHighThreshold.[{#SNMPINDEX}]'
+              trends: '0'
+              value_type: TEXT
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '0.01'
+            -
+              uuid: 1a0dbb5d88614e908b002137d6785274
+              name: 'interface {#SNMPVALUE} RX High Warning'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.3.1.21.{#SNMPINDEX}'
+              key: 'interfaceRXHighWarning.[{#SNMPINDEX}]'
+              trends: '0'
+              value_type: TEXT
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '0.01'
+            -
+              uuid: 4929ef5cc0604aee8d428df8c6ff949b
+              name: 'interface {#SNMPVALUE} RX Low Threshold'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.3.1.13.{#SNMPINDEX}'
+              key: 'interfaceRXLowThreshold.[{#SNMPINDEX}]'
+              trends: '0'
+              value_type: TEXT
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '0.01'
+            -
+              uuid: 19601bd5b9994cb7b9fbf90f0b2c4629
+              name: 'interface {#SNMPVALUE} RX Low Warning'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.3.1.20.{#SNMPINDEX}'
+              key: 'interfaceRXLowWarning.[{#SNMPINDEX}]'
+              trends: '0'
+              value_type: TEXT
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '0.01'
+            -
+              uuid: 5ebdd11fb52140759717205fd6976ec2
+              name: 'interface {#SNMPVALUE} RX Power'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.3.1.32.{#SNMPINDEX}'
+              key: 'interfaceRXPower.[{#SNMPINDEX}]'
+              value_type: FLOAT
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '0.01'
+            -
+              uuid: 58997b81690a4f308c186e7421452c43
+              name: 'interface {#SNMPVALUE} Tranceiver Bias Current(mA)'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.3.1.31.{#SNMPINDEX}'
+              key: 'interfaceTranceiverBiasCurrent.[{#SNMPINDEX}]'
+              value_type: FLOAT
+            -
+              uuid: a716537fcad64689ac9eea7b7a888d6f
+              name: 'interface {#SNMPVALUE} Tranceiver Bias High Threshold(mA)'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.3.1.55.{#SNMPINDEX}'
+              key: 'interfaceTranceiverBiasHighThreshold.[{#SNMPINDEX}]'
+              value_type: FLOAT
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '0.001'
+            -
+              uuid: 1d4062cec4fc4a6997e221d6113c0366
+              name: 'interface {#SNMPVALUE} Tranceiver Bias Low  Threshold(mA)'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.3.1.54.{#SNMPINDEX}'
+              key: 'interfaceTranceiverBiasLowThreshold.[{#SNMPINDEX}]'
+              value_type: FLOAT
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '0.001'
+            -
+              uuid: 0edbf9712efd410388ad147077da1c4b
+              name: 'interface {#SNMPVALUE} Tranceiver Temp'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.3.1.52.{#SNMPINDEX}'
+              key: 'interfaceTranceiverTemp.[{#SNMPINDEX}]'
+              value_type: FLOAT
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '0.01'
+            -
+              uuid: 6db94cff4ce44b3297f7edca9dc746df
+              name: 'interface {#SNMPVALUE} Tranceiver Temp High Threshold'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.3.1.51.{#SNMPINDEX}'
+              key: 'interfaceTranceiverTempHighThreshold.[{#SNMPINDEX}]'
+              value_type: FLOAT
+            -
+              uuid: 83081e4cda254378a7199773170cf8e8
+              name: 'interface {#SNMPVALUE} Tranceiver Temp Low  Threshold'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.3.1.50.{#SNMPINDEX}'
+              key: 'interfaceTranceiverTempLowThreshold.[{#SNMPINDEX}]'
+              value_type: FLOAT
+            -
+              uuid: d6e3f71e8e0443e9b1bbcb720de0de27
+              name: 'interface {#SNMPVALUE} Tranceiver Transfer Distance(m)'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.3.1.45.{#SNMPINDEX}'
+              key: 'interfaceTranceiverTransferDistance.[{#SNMPINDEX}]'
+              trends: '0'
+              value_type: TEXT
+            -
+              uuid: d023930ad2e34dfeabf80ba411b55c24
+              name: 'interface {#SNMPVALUE} Tranceiver Wavelength(nm)'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.3.1.47.{#SNMPINDEX}'
+              key: 'interfaceTranceiverWavelength.[{#SNMPINDEX}]'
+              trends: '0'
+              value_type: TEXT
+            -
+              uuid: 333b018374a5456bad83a66841f0c2b7
+              name: 'interface {#SNMPVALUE} Transceiver S/N'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.3.1.4.{#SNMPINDEX}'
+              key: 'interfaceTransceiverSN.[{#SNMPINDEX}]'
+              trends: '0'
+              value_type: TEXT
+            -
+              uuid: db201f9a6dd54a26baddf28854dddc4a
+              name: 'interface {#SNMPVALUE} Transceiver Vendor'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.3.1.24.{#SNMPINDEX}'
+              key: 'interfaceTransceiverVendor.[{#SNMPINDEX}]'
+              trends: '0'
+              value_type: TEXT
+            -
+              uuid: bf3de7945e104f85994fa9c4b8e8e395
+              name: 'interface {#SNMPVALUE} Transceiver Volt'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.3.1.6.{#SNMPINDEX}'
+              key: 'interfaceTransceiverVolt.[{#SNMPINDEX}]'
+              value_type: FLOAT
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '0.001'
+            -
+              uuid: 88c64405f5f045b8a48ddb27039b22ec
+              name: 'interface {#SNMPVALUE} Transceiver Volt High Threshold'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.3.1.53.{#SNMPINDEX}'
+              key: 'interfaceTransceiverVoltHighThreshold.[{#SNMPINDEX}]'
+              value_type: FLOAT
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '0.001'
+            -
+              uuid: a7cf78d13bb64c50844adfdb359ce8a5
+              name: 'interface {#SNMPVALUE} Transceiver Volt Low Threshold'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.3.1.52.{#SNMPINDEX}'
+              key: 'interfaceTransceiverVoltLowThreshold.[{#SNMPINDEX}]'
+              value_type: FLOAT
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '0.001'
+            -
+              uuid: 3e2d59df778c416ea671f739f737e384
+              name: 'interface {#SNMPVALUE} TX High Threshold'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.3.1.16.{#SNMPINDEX}'
+              key: 'interfaceTXHighThreshold.[{#SNMPINDEX}]'
+              trends: '0'
+              value_type: TEXT
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '0.01'
+            -
+              uuid: e42685304e174eacbd020c57d08dce2b
+              name: 'interface {#SNMPVALUE} TX High Warning'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.3.1.23.{#SNMPINDEX}'
+              key: 'interfaceTXHighWarning.[{#SNMPINDEX}]'
+              trends: '0'
+              value_type: TEXT
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '0.01'
+            -
+              uuid: e4acbfad6ddf4556a2286444bf2be5f3
+              name: 'interface {#SNMPVALUE} TX Low Threshold'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.3.1.15.{#SNMPINDEX}'
+              key: 'interfaceTXLowThreshold.[{#SNMPINDEX}]'
+              trends: '0'
+              value_type: TEXT
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '0.01'
+            -
+              uuid: 21394d8e396449559ef01fe89532c7d3
+              name: 'interface {#SNMPVALUE} TX Low Warning'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.3.1.22.{#SNMPINDEX}'
+              key: 'interfaceTXLowWarning.[{#SNMPINDEX}]'
+              trends: '0'
+              value_type: TEXT
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '0.01'
+            -
+              uuid: fac6d356106d444f93feb2127e25277f
+              name: 'interface {#SNMPVALUE} TX Power'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.3.1.33.{#SNMPINDEX}'
+              key: 'interfaceTXPower.[{#SNMPINDEX}]'
+              value_type: FLOAT
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '0.01'
+          trigger_prototypes:
+            -
+              uuid: 8ae00cfe87904a788a909913335c272c
+              expression: '(last(/Huawei_Pk/interfaceTranceiverBiasCurrent.[{#SNMPINDEX}]) > last(/Huawei_Pk/interfaceTranceiverBiasHighThreshold.[{#SNMPINDEX}])) and last(/Huawei_Pk/adminstts.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},1])= 1'
+              name: 'Interface {#SNMPVALUE} Bias Over threshold ({ITEM.LASTVALUE} mA)'
+              priority: HIGH
+              manual_close: 'YES'
+            -
+              uuid: bf896988553944f6936c9abd11d10445
+              expression: '(last(/Huawei_Pk/interfaceTranceiverBiasCurrent.[{#SNMPINDEX}]) < last(/Huawei_Pk/interfaceTranceiverBiasLowThreshold.[{#SNMPINDEX}])) and last(/Huawei_Pk/adminstts.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},1])=1'
+              name: 'Interface {#SNMPVALUE} Bias Under threshold ({ITEM.LASTVALUE} mA)'
+              priority: HIGH
+              manual_close: 'YES'
+            -
+              uuid: e1fbbd9d2d25446f9569a5078417bdfe
+              expression: '(last(/Huawei_Pk/interfaceRXPower.[{#SNMPINDEX}]) > last(/Huawei_Pk/interfaceRXHighWarning.[{#SNMPINDEX}])) and last(/Huawei_Pk/adminstts.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},1])= 1'
+              name: 'Interface {#SNMPVALUE} RX Over Warning Value  ({ITEM.LASTVALUE} dBM)'
+              priority: HIGH
+              manual_close: 'YES'
+            -
+              uuid: b7d4b6d78dc642df847183f3988a9140
+              expression: '(last(/Huawei_Pk/interfaceRXPower.[{#SNMPINDEX}]) < last(/Huawei_Pk/interfaceRXLowWarning.[{#SNMPINDEX}])) and last(/Huawei_Pk/adminstts.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},1])= 1'
+              name: 'Interface {#SNMPVALUE} RX Under Warning Value  ({ITEM.LASTVALUE} dBM)'
+              priority: HIGH
+              manual_close: 'YES'
+            -
+              uuid: f850f6005a744168863595599e2a2408
+              expression: 'last(/Huawei_Pk/interfaceTranceiverTemp.[{#SNMPINDEX}]) > last(/Huawei_Pk/interfaceTranceiverTempHighThreshold.[{#SNMPINDEX}]) and last(/Huawei_Pk/interfaceTranceiverTempHighThreshold.[{#SNMPINDEX}])<> -255'
+              name: 'Interface {#SNMPVALUE} temperature Over threshold ({ITEM.LASTVALUE}ºC)'
+              priority: HIGH
+              manual_close: 'YES'
+            -
+              uuid: 7731803f33be4361a809741343465b95
+              expression: 'last(/Huawei_Pk/interfaceTranceiverTemp.[{#SNMPINDEX}]) < last(/Huawei_Pk/interfaceTranceiverTempLowThreshold.[{#SNMPINDEX}]) and last(/Huawei_Pk/interfaceTranceiverTempHighThreshold.[{#SNMPINDEX}])<> -255'
+              name: 'Interface {#SNMPVALUE} temperature Under threshold ({ITEM.LASTVALUE}ºC)'
+              priority: HIGH
+              manual_close: 'YES'
+            -
+              uuid: bc5798009a384a4189da7f08128d8332
+              expression: '(last(/Huawei_Pk/interfaceTXPower.[{#SNMPINDEX}]) > last(/Huawei_Pk/interfaceTXHighWarning.[{#SNMPINDEX}])) and last(/Huawei_Pk/adminstts.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},1])= 1'
+              name: 'Interface {#SNMPVALUE} TX Over Warning Value  ({ITEM.LASTVALUE} dBM)'
+              priority: HIGH
+              manual_close: 'YES'
+            -
+              uuid: fa7572c848c34db99fbca406402f73da
+              expression: '(last(/Huawei_Pk/interfaceTXPower.[{#SNMPINDEX}]) < last(/Huawei_Pk/interfaceTXLowWarning.[{#SNMPINDEX}])) and last(/Huawei_Pk/adminstts.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},1])= 1'
+              name: 'Interface {#SNMPVALUE} TX Under Warning Value  ({ITEM.LASTVALUE} dBM)'
+              priority: HIGH
+              manual_close: 'YES'
+            -
+              uuid: 4e17a802f3ec470d86a06bbbb4596325
+              expression: 'last(/Huawei_Pk/interfaceTransceiverVolt.[{#SNMPINDEX}]) > last(/Huawei_Pk/interfaceTransceiverVoltHighThreshold.[{#SNMPINDEX}]) and last(/Huawei_Pk/interfaceTransceiverVoltHighThreshold.[{#SNMPINDEX}]) > -0.255'
+              name: 'Interface {#SNMPVALUE} Voltage Over Threshold ({ITEM.LASTVALUE} V)'
+              priority: HIGH
+              manual_close: 'YES'
+            -
+              uuid: bb0b0aaa0e914cecad153659fee04bf2
+              expression: 'last(/Huawei_Pk/interfaceTransceiverVolt.[{#SNMPINDEX}]) < last(/Huawei_Pk/interfaceTransceiverVoltLowThreshold.[{#SNMPINDEX}]) and last(/Huawei_Pk/interfaceTransceiverVoltHighThreshold.[{#SNMPINDEX}]) > -0.255'
+              name: 'Interface {#SNMPVALUE} Voltage Under Threshold ({ITEM.LASTVALUE} V)'
+              priority: HIGH
+              manual_close: 'YES'
+        -
+          uuid: 2c0890358e204e8a9e7d41db0b1b1567
+          name: 'Transceiver 100G Information'
+          type: SNMP_AGENT
+          snmp_oid: 'discovery[{#SNMPVALUE},.1.3.6.1.2.1.47.1.1.1.1.7]'
+          key: sensorsTransceiver100G
+          filter:
+            conditions:
+              -
+                macro: '{#SNMPVALUE}'
+                value: 100GE
+                formulaid: A
+              -
+                macro: '{#SNMPVALUE}'
+                value: 40GE
+                formulaid: B
+          item_prototypes:
+            -
+              uuid: 549f80cf2fef4f51bb114623ea8c1db7
+              name: 'Interface {#SNMPVALUE} Admin Status'
+              type: EXTERNAL
+              key: 'adminstts.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX}]'
+              trends: '0'
+              value_type: TEXT
+            -
+              uuid: e26a10580d6f4054a6198912bbb8608f
+              name: 'interface {#SNMPVALUE} Lane 1 Bias'
+              type: EXTERNAL
+              key: 'biaslanes.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},1]'
+              value_type: FLOAT
+            -
+              uuid: f2f04a2778bb4d00acb6487e3baa2bd7
+              name: 'interface {#SNMPVALUE} Lane 2 Bias'
+              type: EXTERNAL
+              key: 'biaslanes.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},2]'
+              value_type: FLOAT
+            -
+              uuid: e7d3429d99354974b0a38e4516dbecf3
+              name: 'interface {#SNMPVALUE} Lane 3 Bias'
+              type: EXTERNAL
+              key: 'biaslanes.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},3]'
+              value_type: FLOAT
+            -
+              uuid: 18d88948b0944fe395fba37540c67ab8
+              name: 'interface {#SNMPVALUE} Lane 4 Bias'
+              type: EXTERNAL
+              key: 'biaslanes.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},4]'
+              value_type: FLOAT
+            -
+              uuid: 490caaef44d6447da4491466e64ab727
+              name: 'interface {#SNMPVALUE} RX High Threshold'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.3.1.14.{#SNMPINDEX}'
+              key: 'interface100GRXHighThreshold.[{#SNMPINDEX}]'
+              trends: '0'
+              value_type: TEXT
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '0.01'
+            -
+              uuid: 8577f0cd302c431fa839f51d1de0af1a
+              name: 'interface {#SNMPVALUE} RX High Warning'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.3.1.21.{#SNMPINDEX}'
+              key: 'interface100GRXHighWarning.[{#SNMPINDEX}]'
+              trends: '0'
+              value_type: TEXT
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '0.01'
+            -
+              uuid: c36a7b12085f44f6b3a39294e3b40938
+              name: 'interface {#SNMPVALUE} RX Low Threshold'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.3.1.13.{#SNMPINDEX}'
+              key: 'interface100GRXLowThreshold.[{#SNMPINDEX}]'
+              trends: '0'
+              value_type: TEXT
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '0.01'
+            -
+              uuid: c863814a26ff48f1a64f0732938ac1d3
+              name: 'interface {#SNMPVALUE} RX Low Warning'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.3.1.20.{#SNMPINDEX}'
+              key: 'interface100GRXLowWarning.[{#SNMPINDEX}]'
+              trends: '0'
+              value_type: TEXT
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '0.01'
+            -
+              uuid: 19f6c615d6f24cfb9600126e7f1db981
+              name: 'interface {#SNMPVALUE} TX High Threshold'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.3.1.16.{#SNMPINDEX}'
+              key: 'interface100GTXHighThreshold.[{#SNMPINDEX}]'
+              trends: '0'
+              value_type: TEXT
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '0.01'
+            -
+              uuid: 76a84948441f48aa8c29dd5c2c99c8fe
+              name: 'interface {#SNMPVALUE} TX High Warning'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.3.1.23.{#SNMPINDEX}'
+              key: 'interface100GTXHighWarning.[{#SNMPINDEX}]'
+              trends: '0'
+              value_type: TEXT
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '0.01'
+            -
+              uuid: 98461dd991fc47f6a0aadef6411d99aa
+              name: 'interface {#SNMPVALUE} TX Low Threshold'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.3.1.15.{#SNMPINDEX}'
+              key: 'interface100GTXLowThreshold.[{#SNMPINDEX}]'
+              trends: '0'
+              value_type: TEXT
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '0.01'
+            -
+              uuid: 718288e0cda841f48089087aded815f1
+              name: 'interface {#SNMPVALUE} TX Low Warning'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.3.1.22.{#SNMPINDEX}'
+              key: 'interface100GTXLowWarning.[{#SNMPINDEX}]'
+              trends: '0'
+              value_type: TEXT
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '0.01'
+            -
+              uuid: ff6ab548758f4808b4c3ea21470ab382
+              name: 'interface {#SNMPVALUE} Tranceiver Bias High Threshold(mA)'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.3.1.55.{#SNMPINDEX}'
+              key: 'interfaceTranceiver100GBiasHighThreshold.[{#SNMPINDEX}]'
+              trends: '0'
+              value_type: TEXT
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '0.001'
+            -
+              uuid: 99c334611bb441a9a3c83249a7aade61
+              name: 'interface {#SNMPVALUE} Tranceiver Bias Low  Threshold(mA)'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.3.1.54.{#SNMPINDEX}'
+              key: 'interfaceTranceiver100GBiasLowThreshold.[{#SNMPINDEX}]'
+              trends: '0'
+              value_type: TEXT
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '0.001'
+            -
+              uuid: 3c643643c2b64778a26d761a6cebd768
+              name: 'interface {#SNMPVALUE} Tranceiver Temp'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.3.1.52.{#SNMPINDEX}'
+              key: 'interfaceTranceiver100GTemp.[{#SNMPINDEX}]'
+              value_type: FLOAT
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '0.01'
+            -
+              uuid: 678bf40f27004632857e7dbaf613d0ed
+              name: 'interface {#SNMPVALUE} Tranceiver Temp High Threshold'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.3.1.51.{#SNMPINDEX}'
+              key: 'interfaceTranceiver100GTempHighThreshold.[{#SNMPINDEX}]'
+              trends: '0'
+              value_type: TEXT
+            -
+              uuid: 075403ad022543d080fff46aa144c728
+              name: 'interface {#SNMPVALUE} Tranceiver Temp Low  Threshold'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.3.1.50.{#SNMPINDEX}'
+              key: 'interfaceTranceiver100GTempLowThreshold.[{#SNMPINDEX}]'
+              trends: '0'
+              value_type: TEXT
+            -
+              uuid: f31a60e807914755b847b05d70f16e17
+              name: 'interface {#SNMPVALUE} Tranceiver Transfer Distance(m)'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.3.1.45.{#SNMPINDEX}'
+              key: 'interfaceTranceiver100GTransferDistance.[{#SNMPINDEX}]'
+              trends: '0'
+              value_type: TEXT
+            -
+              uuid: a105ad9bac6946b199b7210e6461d094
+              name: 'interface {#SNMPVALUE} Tranceiver Wavelength(nm)'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.3.1.47.{#SNMPINDEX}'
+              key: 'interfaceTranceiver100GWavelength.[{#SNMPINDEX}]'
+              trends: '0'
+              value_type: TEXT
+            -
+              uuid: 437ec3d39c484d54b92f06ebbdb8e3b6
+              name: 'interface {#SNMPVALUE} Transceiver S/N'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.3.1.4.{#SNMPINDEX}'
+              key: 'interfaceTransceiver100GSN.[{#SNMPINDEX}]'
+              trends: '0'
+              value_type: TEXT
+            -
+              uuid: 82ed705e2e744c269c13f24c76d7f9ad
+              name: 'interface {#SNMPVALUE} Transceiver Vendor'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.3.1.24.{#SNMPINDEX}'
+              key: 'interfaceTransceiver100GVendor.[{#SNMPINDEX}]'
+              trends: '0'
+              value_type: TEXT
+            -
+              uuid: 4fbee1e0faa74f989f5b606aca30f228
+              name: 'interface {#SNMPVALUE} Transceiver Volt'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.3.1.6.{#SNMPINDEX}'
+              key: 'interfaceTransceiver100GVolt.[{#SNMPINDEX}]'
+              value_type: FLOAT
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '0.001'
+            -
+              uuid: 416a9fd70a2e454898999d7f9df54efe
+              name: 'interface {#SNMPVALUE} Transceiver Volt High Threshold'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.3.1.53.{#SNMPINDEX}'
+              key: 'interfaceTransceiver100GVoltHighThreshold.[{#SNMPINDEX}]'
+              value_type: FLOAT
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '0.001'
+            -
+              uuid: c51e6f7ed2a146db8dc8992b3b94cc32
+              name: 'interface {#SNMPVALUE} Transceiver Volt Low Threshold'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2011.5.25.31.1.1.3.1.52.{#SNMPINDEX}'
+              key: 'interfaceTransceiver100GVoltLowThreshold.[{#SNMPINDEX}]'
+              value_type: FLOAT
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '0.001'
+            -
+              uuid: fb54ab73238f4073bea0c5a13f1e4fe5
+              name: 'interface {#SNMPVALUE} Lane 1 RX Power'
+              type: EXTERNAL
+              key: 'rxlane.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},1]'
+              value_type: FLOAT
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '0.01'
+            -
+              uuid: c5f264b20e3949719af07c76da669cb5
+              name: 'interface {#SNMPVALUE} Lane 2 RX Power'
+              type: EXTERNAL
+              key: 'rxlane.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},2]'
+              value_type: FLOAT
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '0.01'
+            -
+              uuid: 05981041b3ab47bb9eb58d51b26541cd
+              name: 'interface {#SNMPVALUE} Lane 3 RX Power'
+              type: EXTERNAL
+              key: 'rxlane.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},3]'
+              value_type: FLOAT
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '0.01'
+            -
+              uuid: 69cbc3f3d70e468690f24534f6c77032
+              name: 'interface {#SNMPVALUE} Lane 4 RX Power'
+              type: EXTERNAL
+              key: 'rxlane.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},4]'
+              value_type: FLOAT
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '0.01'
+            -
+              uuid: 3e092b9bdaf44651abe6ebc03d012e3b
+              name: 'interface {#SNMPVALUE} Lane 1 TX Power'
+              type: EXTERNAL
+              key: 'txlane.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},1]'
+              value_type: FLOAT
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '0.01'
+            -
+              uuid: 3b062ab4ca1c465e810c94767d5ef00c
+              name: 'interface {#SNMPVALUE} Lane 2 TX Power'
+              type: EXTERNAL
+              key: 'txlane.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},2]'
+              value_type: FLOAT
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '0.01'
+            -
+              uuid: 1b1a7e85065f4446a1304e6ad40ccafe
+              name: 'interface {#SNMPVALUE} Lane 3 TX Power'
+              type: EXTERNAL
+              key: 'txlane.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},3]'
+              value_type: FLOAT
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '0.01'
+            -
+              uuid: 7d08ba68ba974e48953cf8bd2e76d31d
+              name: 'interface {#SNMPVALUE} Lane 4 TX Power'
+              type: EXTERNAL
+              key: 'txlane.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},4]'
+              value_type: FLOAT
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '0.01'
+          trigger_prototypes:
+            -
+              uuid: 9fff4acef5a04b48a24af5b0256f3d12
+              expression: '(last(/Huawei_Pk/biaslanes.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},1])> last(/Huawei_Pk/interfaceTranceiver100GBiasHighThreshold.[{#SNMPINDEX}]) or last(/Huawei_Pk/biaslanes.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},2])> last(/Huawei_Pk/interfaceTranceiver100GBiasHighThreshold.[{#SNMPINDEX}]) or last(/Huawei_Pk/biaslanes.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},3])> last(/Huawei_Pk/interfaceTranceiver100GBiasHighThreshold.[{#SNMPINDEX}]) or last(/Huawei_Pk/biaslanes.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},4])> last(/Huawei_Pk/interfaceTranceiver100GBiasHighThreshold.[{#SNMPINDEX}])) and last(/Huawei_Pk/adminstts.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX}])=1'
+              name: 'Interface {#SNMPVALUE} Bias Over threshold ({ITEM.LASTVALUE}mA)'
+              priority: HIGH
+              manual_close: 'YES'
+            -
+              uuid: 494993e3fdea42419f3f2b505237084f
+              expression: '(last(/Huawei_Pk/biaslanes.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},1])< last(/Huawei_Pk/interfaceTranceiver100GBiasLowThreshold.[{#SNMPINDEX}]) or last(/Huawei_Pk/biaslanes.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},2])< last(/Huawei_Pk/interfaceTranceiver100GBiasLowThreshold.[{#SNMPINDEX}]) or last(/Huawei_Pk/biaslanes.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},3])< last(/Huawei_Pk/interfaceTranceiver100GBiasLowThreshold.[{#SNMPINDEX}]) or last(/Huawei_Pk/biaslanes.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},4])< last(/Huawei_Pk/interfaceTranceiver100GBiasLowThreshold.[{#SNMPINDEX}])) and last(/Huawei_Pk/adminstts.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX}])=1'
+              name: 'Interface {#SNMPVALUE} Bias Under Threshold ({ITEM.LASTVALUE}mA)'
+              priority: HIGH
+              manual_close: 'YES'
+            -
+              uuid: 354aa9e079f947d9be2daf33bba756cf
+              expression: '(last(/Huawei_Pk/rxlane.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},1]) > last(/Huawei_Pk/interface100GRXHighWarning.[{#SNMPINDEX}]) or last(/Huawei_Pk/rxlane.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},2]) > last(/Huawei_Pk/interface100GRXHighWarning.[{#SNMPINDEX}]) or last(/Huawei_Pk/rxlane.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},3]) > last(/Huawei_Pk/interface100GRXHighWarning.[{#SNMPINDEX}]) or last(/Huawei_Pk/rxlane.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},4]) > last(/Huawei_Pk/interface100GRXHighWarning.[{#SNMPINDEX}])) and last(/Huawei_Pk/adminstts.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX}])= 1'
+              name: 'Interface {#SNMPVALUE} RX Over Warning Value  ({ITEM.LASTVALUE}dBM)'
+              priority: HIGH
+              manual_close: 'YES'
+            -
+              uuid: d9b3312b33834f1bb24fb1b25e9f7b69
+              expression: '(last(/Huawei_Pk/rxlane.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},1]) < last(/Huawei_Pk/interface100GRXLowWarning.[{#SNMPINDEX}]) or last(/Huawei_Pk/rxlane.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},2]) < last(/Huawei_Pk/interface100GRXLowWarning.[{#SNMPINDEX}]) or last(/Huawei_Pk/rxlane.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},3]) < last(/Huawei_Pk/interface100GRXLowWarning.[{#SNMPINDEX}]) or last(/Huawei_Pk/rxlane.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},4]) < last(/Huawei_Pk/interface100GRXLowWarning.[{#SNMPINDEX}])) and last(/Huawei_Pk/adminstts.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX}])= 1'
+              name: 'Interface {#SNMPVALUE} RX Under Warning Value  ({ITEM.LASTVALUE}dBM)'
+              priority: HIGH
+              manual_close: 'YES'
+            -
+              uuid: 01f533a4c7dc4201907f936abf8ae8f1
+              expression: 'last(/Huawei_Pk/interfaceTranceiver100GTemp.[{#SNMPINDEX}]) > last(/Huawei_Pk/interfaceTranceiver100GTempHighThreshold.[{#SNMPINDEX}]) and last(/Huawei_Pk/interfaceTranceiver100GTempHighThreshold.[{#SNMPINDEX}]) > -255'
+              name: 'Interface {#SNMPVALUE} temperature Over threshold ({ITEM.LASTVALUE}ºC)'
+              priority: HIGH
+              manual_close: 'YES'
+            -
+              uuid: 7b839ed8925a491b8dbc435e2ab0ea11
+              expression: 'last(/Huawei_Pk/interfaceTranceiver100GTemp.[{#SNMPINDEX}]) < last(/Huawei_Pk/interfaceTranceiver100GTempLowThreshold.[{#SNMPINDEX}]) and last(/Huawei_Pk/interfaceTranceiver100GTempHighThreshold.[{#SNMPINDEX}]) > -255'
+              name: 'Interface {#SNMPVALUE} temperature Under threshold ({ITEM.LASTVALUE}ºC)'
+              priority: HIGH
+              manual_close: 'YES'
+            -
+              uuid: 2d95d8b681c64c928a3b623c636087ac
+              expression: '(last(/Huawei_Pk/txlane.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},1]) > last(/Huawei_Pk/interface100GTXHighWarning.[{#SNMPINDEX}]) or last(/Huawei_Pk/txlane.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},2]) > last(/Huawei_Pk/interface100GTXHighWarning.[{#SNMPINDEX}]) or last(/Huawei_Pk/txlane.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},3]) > last(/Huawei_Pk/interface100GTXHighWarning.[{#SNMPINDEX}]) or last(/Huawei_Pk/txlane.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},4]) > last(/Huawei_Pk/interface100GTXHighWarning.[{#SNMPINDEX}])) and last(/Huawei_Pk/adminstts.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX}])= 1'
+              name: 'Interface {#SNMPVALUE} TX Over Warning Value  ({ITEM.LASTVALUE}dBM)'
+              priority: HIGH
+              manual_close: 'YES'
+            -
+              uuid: d31ec2b8ff464f37b37de17d24e47fa6
+              expression: '(last(/Huawei_Pk/txlane.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},1]) < last(/Huawei_Pk/interface100GTXLowWarning.[{#SNMPINDEX}]) or last(/Huawei_Pk/txlane.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},2]) < last(/Huawei_Pk/interface100GTXLowWarning.[{#SNMPINDEX}]) or last(/Huawei_Pk/txlane.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},3]) < last(/Huawei_Pk/interface100GTXLowWarning.[{#SNMPINDEX}]) or last(/Huawei_Pk/txlane.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},4]) < last(/Huawei_Pk/interface100GTXLowWarning.[{#SNMPINDEX}])) and last(/Huawei_Pk/adminstts.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX}])= 1'
+              name: 'Interface {#SNMPVALUE} TX Under Warning Value  ({ITEM.LASTVALUE}dBM)'
+              priority: HIGH
+              manual_close: 'YES'
+            -
+              uuid: 998585e9fa0f4d0faa1c7dbf727173a0
+              expression: 'last(/Huawei_Pk/interfaceTransceiver100GVolt.[{#SNMPINDEX}]) > last(/Huawei_Pk/interfaceTransceiver100GVoltHighThreshold.[{#SNMPINDEX}])'
+              name: 'Interface {#SNMPVALUE} Volt Over threshold ({ITEM.LASTVALUE}V)'
+              priority: HIGH
+              manual_close: 'YES'
+            -
+              uuid: 8f523857c6324f34b1764c74a215f540
+              expression: 'last(/Huawei_Pk/interfaceTransceiver100GVolt.[{#SNMPINDEX}]) > last(/Huawei_Pk/interfaceTransceiver100GVoltHighThreshold.[{#SNMPINDEX}])'
+              name: 'Interface {#SNMPVALUE} Volt Under threshold ({ITEM.LASTVALUE}V)'
+              priority: HIGH
+              manual_close: 'YES'
+          graph_prototypes:
+            -
+              uuid: 28e7d22b8a1b4204b1adec60b2c2e349
+              name: teste
+              graph_items:
+                -
+                  color: 199C0D
+                  calc_fnc: ALL
+                  item:
+                    host: Huawei_Pk
+                    key: 'biaslanes.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},1]'
+                -
+                  sortorder: '1'
+                  color: F63100
+                  calc_fnc: ALL
+                  item:
+                    host: Huawei_Pk
+                    key: 'biaslanes.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},2]'
+                -
+                  sortorder: '2'
+                  color: 2774A4
+                  calc_fnc: ALL
+                  item:
+                    host: Huawei_Pk
+                    key: 'biaslanes.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},3]'
+                -
+                  sortorder: '3'
+                  color: F7941D
+                  calc_fnc: ALL
+                  item:
+                    host: Huawei_Pk
+                    key: 'biaslanes.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},4]'
+    -
+      uuid: e48007f5ca784538b0265871c6db1bea
+      template: 'NOKIA SR1'
+      name: 'NOKIA SR1'
+      groups:
+        -
+          name: 'PATRICK TEMPLATES'
+      items:
+        -
+          uuid: 73a68418060243f2b73dd63d24e3f906
+          name: 'Connected Clients'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.6527.3.1.2.2.3.46.1.16.1.1.1
+          key: connectedclients
+      discovery_rules:
+        -
+          uuid: d387ab305d7b4a71a33f212fd67f7d82
+          name: 'Interface Statistics'
+          type: SNMP_AGENT
+          snmp_oid: 'discovery[{#SNMPVALUE},.1.3.6.1.2.1.31.1.1.1.1]'
+          key: IntStatistics
+          filter:
+            conditions:
+              -
+                macro: '{#SNMPVALUE}'
+                value: 1/1/c
+                formulaid: A
+              -
+                macro: '{#SNMPVALUE}'
+                value: 1/1/m
+                formulaid: B
+              -
+                macro: '{#SNMPVALUE}'
+                value: A/
+                formulaid: C
+              -
+                macro: '{#SNMPVALUE}'
+                value: pxc-
+                formulaid: D
+          item_prototypes:
+            -
+              uuid: 79c42e6f8837498a9eb3a05770b97d5e
+              name: 'Interface {#SNMPVALUE} Admin Status'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.2.1.2.2.1.7.{#SNMPINDEX}'
+              key: 'intAdminStts.[{#SNMPINDEX}]'
+            -
+              uuid: 58942ea15f8a4d97adea6a6bbf35c87c
+              name: 'Interface {#SNMPVALUE} Description'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.2.1.31.1.1.1.18.{#SNMPINDEX}'
+              key: 'intDesc.[{#SNMPINDEX}]'
+              trends: '0'
+              value_type: TEXT
+            -
+              uuid: 7626a5cf1ffa42d79778c30769b58d67
+              name: 'interface {#SNMPVALUE} Velocidade'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.2.1.31.1.1.1.15.{#SNMPINDEX}'
+              key: 'interfaceHighSpeed.[{#SNMPINDEX}]'
+              units: bps
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '1000000'
+            -
+              uuid: 26207e6291a84eed98415341eaa07def
+              name: 'interface {#SNMPVALUE} Velocidade 85 %'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.2.1.31.1.1.1.15.{#SNMPINDEX}'
+              key: 'interfaceHighSpeedpercent.[{#SNMPINDEX}]'
+              units: bps
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '0.85'
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '1000000'
+            -
+              uuid: fa492e43087048aeb2fca6253413a41c
+              name: 'interface {#SNMPVALUE} Download'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.2.1.31.1.1.1.6.{#SNMPINDEX}'
+              key: 'interfaceIncomingTraffic.[{#SNMPINDEX}]'
+              value_type: FLOAT
+              units: bps
+              preprocessing:
+                -
+                  type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
+            -
+              uuid: 8e6d2ad8f9654bfd910c757fb77051b4
+              name: 'interface {#SNMPVALUE} Upload'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.2.1.31.1.1.1.10.{#SNMPINDEX}'
+              key: 'interfaceOutgoingTraffic.[{#SNMPINDEX}]'
+              units: bps
+              preprocessing:
+                -
+                  type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
+            -
+              uuid: 9d977be987cc40868d6be37054da83de
+              name: 'interface {#SNMPVALUE} Status'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.2.1.2.2.1.8.{#SNMPINDEX}'
+              key: 'interfaceStts.[{#SNMPINDEX}]'
+            -
+              uuid: d01d65a9b7924ffb961162fe179e0423
+              name: 'Interface {#SNMPVALUE} Incoming Discart'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.2.1.2.2.1.13.{#SNMPINDEX}'
+              key: 'intIncomingDiscart.[{#SNMPINDEX}]'
+              units: pkts
+              preprocessing:
+                -
+                  type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
+            -
+              uuid: 6aceb210c8bb4e009eb7abbcbe925345
+              name: 'Interface {#SNMPVALUE} Outgoing Discart'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.2.1.2.2.1.19.{#SNMPINDEX}'
+              key: 'intOutgoingDiscart.[{#SNMPINDEX}]'
+              units: pkts
+              preprocessing:
+                -
+                  type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
