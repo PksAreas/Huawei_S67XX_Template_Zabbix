@@ -1,6 +1,6 @@
 zabbix_export:
   version: '6.0'
-  date: '2023-08-29T13:49:17Z'
+  date: '2023-08-31T19:12:10Z'
   groups:
     -
       uuid: 292807c8094c457faa9211b481f99971
@@ -724,30 +724,35 @@ zabbix_export:
               key: 'adminstts.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX}]'
               trends: '0'
               value_type: TEXT
+              description: 'The use of the script adminstts.sh in the external scripts folder is necessary'
             -
               uuid: e26a10580d6f4054a6198912bbb8608f
               name: 'interface {#SNMPVALUE} Lane 1 Bias'
               type: EXTERNAL
               key: 'biaslanes.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},1]'
               value_type: FLOAT
+              description: 'The use of the script biaslanes.sh in the external scripts folder is necessary'
             -
               uuid: f2f04a2778bb4d00acb6487e3baa2bd7
               name: 'interface {#SNMPVALUE} Lane 2 Bias'
               type: EXTERNAL
               key: 'biaslanes.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},2]'
               value_type: FLOAT
+              description: 'The use of the script biaslanes.sh in the external scripts folder is necessary'
             -
               uuid: e7d3429d99354974b0a38e4516dbecf3
               name: 'interface {#SNMPVALUE} Lane 3 Bias'
               type: EXTERNAL
               key: 'biaslanes.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},3]'
               value_type: FLOAT
+              description: 'The use of the script biaslanes.sh in the external scripts folder is necessary'
             -
               uuid: 18d88948b0944fe395fba37540c67ab8
               name: 'interface {#SNMPVALUE} Lane 4 Bias'
               type: EXTERNAL
               key: 'biaslanes.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},4]'
               value_type: FLOAT
+              description: 'The use of the script biaslanes.sh in the external scripts folder is necessary'
             -
               uuid: 490caaef44d6447da4491466e64ab727
               name: 'interface {#SNMPVALUE} RX High Threshold'
@@ -980,6 +985,7 @@ zabbix_export:
               type: EXTERNAL
               key: 'rxlane.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},1]'
               value_type: FLOAT
+              description: 'The use of the script rxlane.sh in the external scripts folder is necessary'
               preprocessing:
                 -
                   type: MULTIPLIER
@@ -991,6 +997,7 @@ zabbix_export:
               type: EXTERNAL
               key: 'rxlane.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},2]'
               value_type: FLOAT
+              description: 'The use of the script rxlane.sh in the external scripts folder is necessary'
               preprocessing:
                 -
                   type: MULTIPLIER
@@ -1002,6 +1009,7 @@ zabbix_export:
               type: EXTERNAL
               key: 'rxlane.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},3]'
               value_type: FLOAT
+              description: 'The use of the script rxlane.sh in the external scripts folder is necessary'
               preprocessing:
                 -
                   type: MULTIPLIER
@@ -1013,6 +1021,7 @@ zabbix_export:
               type: EXTERNAL
               key: 'rxlane.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},4]'
               value_type: FLOAT
+              description: 'The use of the script rxlane.sh in the external scripts folder is necessary'
               preprocessing:
                 -
                   type: MULTIPLIER
@@ -1024,6 +1033,7 @@ zabbix_export:
               type: EXTERNAL
               key: 'txlane.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},1]'
               value_type: FLOAT
+              description: 'The use of the script txlane.sh in the external scripts folder is necessary'
               preprocessing:
                 -
                   type: MULTIPLIER
@@ -1035,6 +1045,7 @@ zabbix_export:
               type: EXTERNAL
               key: 'txlane.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},2]'
               value_type: FLOAT
+              description: 'The use of the script txlane.sh in the external scripts folder is necessary'
               preprocessing:
                 -
                   type: MULTIPLIER
@@ -1046,6 +1057,7 @@ zabbix_export:
               type: EXTERNAL
               key: 'txlane.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},3]'
               value_type: FLOAT
+              description: 'The use of the script txlane.sh in the external scripts folder is necessary'
               preprocessing:
                 -
                   type: MULTIPLIER
@@ -1057,6 +1069,7 @@ zabbix_export:
               type: EXTERNAL
               key: 'txlane.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},4]'
               value_type: FLOAT
+              description: 'The use of the script txlane.sh in the external scripts folder is necessary'
               preprocessing:
                 -
                   type: MULTIPLIER
@@ -1155,140 +1168,3 @@ zabbix_export:
                   item:
                     host: Huawei_Pk
                     key: 'biaslanes.sh[{$SNMP_COMMUNITY}, {HOST.IP}, {#SNMPINDEX},4]'
-    -
-      uuid: e48007f5ca784538b0265871c6db1bea
-      template: 'NOKIA SR1'
-      name: 'NOKIA SR1'
-      groups:
-        -
-          name: 'PATRICK TEMPLATES'
-      items:
-        -
-          uuid: 73a68418060243f2b73dd63d24e3f906
-          name: 'Connected Clients'
-          type: SNMP_AGENT
-          snmp_oid: .1.3.6.1.4.1.6527.3.1.2.2.3.46.1.16.1.1.1
-          key: connectedclients
-      discovery_rules:
-        -
-          uuid: d387ab305d7b4a71a33f212fd67f7d82
-          name: 'Interface Statistics'
-          type: SNMP_AGENT
-          snmp_oid: 'discovery[{#SNMPVALUE},.1.3.6.1.2.1.31.1.1.1.1]'
-          key: IntStatistics
-          filter:
-            conditions:
-              -
-                macro: '{#SNMPVALUE}'
-                value: 1/1/c
-                formulaid: A
-              -
-                macro: '{#SNMPVALUE}'
-                value: 1/1/m
-                formulaid: B
-              -
-                macro: '{#SNMPVALUE}'
-                value: A/
-                formulaid: C
-              -
-                macro: '{#SNMPVALUE}'
-                value: pxc-
-                formulaid: D
-          item_prototypes:
-            -
-              uuid: 79c42e6f8837498a9eb3a05770b97d5e
-              name: 'Interface {#SNMPVALUE} Admin Status'
-              type: SNMP_AGENT
-              snmp_oid: '1.3.6.1.2.1.2.2.1.7.{#SNMPINDEX}'
-              key: 'intAdminStts.[{#SNMPINDEX}]'
-            -
-              uuid: 58942ea15f8a4d97adea6a6bbf35c87c
-              name: 'Interface {#SNMPVALUE} Description'
-              type: SNMP_AGENT
-              snmp_oid: '1.3.6.1.2.1.31.1.1.1.18.{#SNMPINDEX}'
-              key: 'intDesc.[{#SNMPINDEX}]'
-              trends: '0'
-              value_type: TEXT
-            -
-              uuid: 7626a5cf1ffa42d79778c30769b58d67
-              name: 'interface {#SNMPVALUE} Velocidade'
-              type: SNMP_AGENT
-              snmp_oid: '1.3.6.1.2.1.31.1.1.1.15.{#SNMPINDEX}'
-              key: 'interfaceHighSpeed.[{#SNMPINDEX}]'
-              units: bps
-              preprocessing:
-                -
-                  type: MULTIPLIER
-                  parameters:
-                    - '1000000'
-            -
-              uuid: 26207e6291a84eed98415341eaa07def
-              name: 'interface {#SNMPVALUE} Velocidade 85 %'
-              type: SNMP_AGENT
-              snmp_oid: '1.3.6.1.2.1.31.1.1.1.15.{#SNMPINDEX}'
-              key: 'interfaceHighSpeedpercent.[{#SNMPINDEX}]'
-              units: bps
-              preprocessing:
-                -
-                  type: MULTIPLIER
-                  parameters:
-                    - '0.85'
-                -
-                  type: MULTIPLIER
-                  parameters:
-                    - '1000000'
-            -
-              uuid: fa492e43087048aeb2fca6253413a41c
-              name: 'interface {#SNMPVALUE} Download'
-              type: SNMP_AGENT
-              snmp_oid: '1.3.6.1.2.1.31.1.1.1.6.{#SNMPINDEX}'
-              key: 'interfaceIncomingTraffic.[{#SNMPINDEX}]'
-              value_type: FLOAT
-              units: bps
-              preprocessing:
-                -
-                  type: CHANGE_PER_SECOND
-                  parameters:
-                    - ''
-            -
-              uuid: 8e6d2ad8f9654bfd910c757fb77051b4
-              name: 'interface {#SNMPVALUE} Upload'
-              type: SNMP_AGENT
-              snmp_oid: '1.3.6.1.2.1.31.1.1.1.10.{#SNMPINDEX}'
-              key: 'interfaceOutgoingTraffic.[{#SNMPINDEX}]'
-              units: bps
-              preprocessing:
-                -
-                  type: CHANGE_PER_SECOND
-                  parameters:
-                    - ''
-            -
-              uuid: 9d977be987cc40868d6be37054da83de
-              name: 'interface {#SNMPVALUE} Status'
-              type: SNMP_AGENT
-              snmp_oid: '1.3.6.1.2.1.2.2.1.8.{#SNMPINDEX}'
-              key: 'interfaceStts.[{#SNMPINDEX}]'
-            -
-              uuid: d01d65a9b7924ffb961162fe179e0423
-              name: 'Interface {#SNMPVALUE} Incoming Discart'
-              type: SNMP_AGENT
-              snmp_oid: '1.3.6.1.2.1.2.2.1.13.{#SNMPINDEX}'
-              key: 'intIncomingDiscart.[{#SNMPINDEX}]'
-              units: pkts
-              preprocessing:
-                -
-                  type: CHANGE_PER_SECOND
-                  parameters:
-                    - ''
-            -
-              uuid: 6aceb210c8bb4e009eb7abbcbe925345
-              name: 'Interface {#SNMPVALUE} Outgoing Discart'
-              type: SNMP_AGENT
-              snmp_oid: '1.3.6.1.2.1.2.2.1.19.{#SNMPINDEX}'
-              key: 'intOutgoingDiscart.[{#SNMPINDEX}]'
-              units: pkts
-              preprocessing:
-                -
-                  type: CHANGE_PER_SECOND
-                  parameters:
-                    - ''
